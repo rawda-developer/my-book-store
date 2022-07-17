@@ -1,6 +1,6 @@
 # My Book Store
 
-This project is an e-commerce website for selling books.
+This project is an e-commerce website for selling books using the MERN Stack. It's still in progress
 
 # Node JS, Express JS, and Mongoose
 
@@ -19,6 +19,13 @@ cd backend
 npm install
 npm run dev
 ```
+
+## TODO
+
+- Complete models
+- Add authentication using Passport.js
+- Add test cases for routes using Jest
+- Add Frontend using React and Material UI
 
 ## Author
 

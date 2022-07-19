@@ -1,33 +1,40 @@
 import express from 'express';
+import multer from 'multer';
+import path from 'path';
 import {
   getProducts,
   getProduct,
   createProduct,
   updateProduct,
   deleteProduct,
-  getProductImages,
-  getProductImage,
-  createProductImage,
-  updateProductImage,
-  deleteProductImage,
   getProductTags,
   getProductTag,
   createProductTag,
   updateProductTag,
   deleteProductTag,
+  uploadImage,
 } from './product.js';
 const router = express.Router();
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads');
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
+    );
+  },
+});
+var upload = multer({ storage: storage });
+
 router
   .get('/products', getProducts)
   .get('/products/:id', getProduct)
   .post('/products', createProduct)
   .put('/products/:id', updateProduct)
   .delete('/products/:id', deleteProduct)
-  .get('/products/:id/images', getProductImages)
-  .get('/products/:id/images/:id', getProductImage)
-  .post('/products/:id/images', createProductImage)
-  .put('/products/:id/images/:id', updateProductImage)
-  .delete('/products/:id/images/:id', deleteProductImage)
+  .post('/products/:id/images', upload.single('file'), uploadImage)
   .get('/products/:id/tags', getProductTags)
   .get('/products/:id/tags/:id', getProductTag)
   .post('/products/:id/tags', createProductTag)

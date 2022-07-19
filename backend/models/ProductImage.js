@@ -9,5 +9,9 @@ const ProductImageSchema = new Schema({
     type: String,
     required: true,
   },
+  file_mime_type: {
+    type: String,
+    required: true,
+  },
 });
 export default mongoose.model('ProductImage', ProductImageSchema);

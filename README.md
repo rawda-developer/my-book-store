@@ -22,7 +22,7 @@ npm run dev
 
 ## TODO
 
-- Complete models
+- Complete database models
 - Add authentication using Passport.js
 - Add test cases for routes using Jest
 - Add Frontend using React and Material UI

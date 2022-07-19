@@ -1,6 +1,7 @@
 import Product from '../models/Product.js';
 import ProductImage from '../models/ProductImage.js';
 import ProductTag from '../models/ProductTag.js';
+import multer from 'multer';
 export const getProducts = (req, res) => {
   Product.find({})
     .populate('tags')
@@ -33,41 +34,20 @@ export const createProduct = (req, res) => {
     }
   });
 };
-
-export const updateProduct = (req, res) => {
-  Product.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true },
-    (err, product) => {
-      if (err) {
-        res.status(500).send(err);
-      } else {
-        res.status(200).send(product);
-      }
-    }
-  );
-};
-export const deleteProduct = (req, res) => {
-  Product.findByIdAndRemove(req.params.id, (err, product) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.status(200).send(product);
-    }
+export const uploadImage = (req, res, next) => {
+  const file = req.file;
+  if (!file) {
+    const error = new Error('No file received');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  const productImage = new ProductImage({
+    image: file.filename,
+    thumbnail: file.filename,
+    description: req.body.description,
+    file_mime_type: file.mimetype,
   });
-};
-export const getProductImages = (req, res) => {
-  ProductImage.find({ product: req.params.id }).exec((err, productImages) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.json(productImages);
-    }
-  });
-};
-export const getProductImage = (req, res) => {
-  ProductImage.findById(req.params.id, (err, productImage) => {
+  productImage.save((err, productImage) => {
     if (err) {
       res.status(500).send(err);
     } else {
@@ -75,69 +55,24 @@ export const getProductImage = (req, res) => {
     }
   });
 };
-export const createProductImage = (req, res) => {
-  const productImage = new ProductImage(req.body);
-  productImage.save((err, productImage) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      Product.findByIdAndUpdate(
-        req.body.product,
-        { $push: { images: productImage._id } },
-        { new: true },
-        (err, product) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.json(product);
-          }
-        }
-      );
-    }
-  });
-};
-export const updateProductImage = (req, res) => {
-  ProductImage.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true },
-    (err, productImage) => {
+
+export const updateProduct = (req, res) => {
+  Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    .populate('tags')
+    .exec((err, product) => {
       if (err) {
         res.status(500).send(err);
       } else {
-        Product.findByIdAndUpdate(
-          req.body.product,
-          { $push: { images: productImage._id } },
-          { new: true },
-          (err, product) => {
-            if (err) {
-              res.status(500).send(err);
-            } else {
-              res.json(product);
-            }
-          }
-        );
+        res.json(product);
       }
-    }
-  );
+    });
 };
-export const deleteProductImage = (req, res) => {
-  ProductImage.findByIdAndRemove(req.params.id, (err, productImage) => {
+export const deleteProduct = (req, res) => {
+  Product.findByIdAndRemove(req.params.id, (err, product) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      Product.findByIdAndUpdate(
-        req.body.product,
-        { $pull: { images: productImage._id } },
-        { new: true },
-        (err, product) => {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.json(product);
-          }
-        }
-      );
+      res.status(200).send(product);
     }
   });
 };

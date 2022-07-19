@@ -6,6 +6,7 @@ import routes from './routes/index.js';
 const app = express();
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
+app.use('/thumbnails', express.static('thumbnails'));
 dotenv.config();
 const mongoString = process.env.DATABASE_URL;
 mongoose.connect(mongoString);

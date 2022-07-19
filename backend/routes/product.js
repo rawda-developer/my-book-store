@@ -1,7 +1,9 @@
 import Product from '../models/Product.js';
 import ProductImage from '../models/ProductImage.js';
 import ProductTag from '../models/ProductTag.js';
-import multer from 'multer';
+import ImageResizer from '../utils/ImageResizer.js';
+import path from 'path';
+
 export const getProducts = (req, res) => {
   Product.find({})
     .populate('tags')
@@ -34,18 +36,22 @@ export const createProduct = (req, res) => {
     }
   });
 };
-export const uploadImage = (req, res, next) => {
-  const file = req.file;
-  if (!file) {
+export const uploadImage = async (req, res, next) => {
+  const origImage = req.file;
+  console.log(origImage);
+  if (!origImage) {
     const error = new Error('No file received');
     error.httpStatusCode = 400;
     return next(error);
   }
+  const thumbnailsFolder = path.join(__dirname, '../thumbnails');
+  const resizer = new ImageResizer(thumbnailsFolder);
+  console.log('buffer', origImage.path);
+  const thumbnail = await resizer.save(origImage.path);
   const productImage = new ProductImage({
-    image: file.filename,
-    thumbnail: file.filename,
-    description: req.body.description,
-    file_mime_type: file.mimetype,
+    image: origImage.filename,
+    thumbnail: thumbnail,
+    file_mime_type: origImage.mimetype,
   });
   productImage.save((err, productImage) => {
     if (err) {

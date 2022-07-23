@@ -28,6 +28,7 @@ npm run dev
 - Built Product, ProductImage, and ProductTag models
 - Built routes for CRUD operations of the Product Model
 - Built an image resizer to generate thumbnails from product images
+- Added Basic User Authentication using Passport.js
 
 ## TODO
 
@@ -35,6 +36,7 @@ npm run dev
 - Add authentication using Passport.js
 - Add test cases for routes using Jest
 - Add Frontend using React and Material UI
+- Add social media authentication
 
 ## Author
 

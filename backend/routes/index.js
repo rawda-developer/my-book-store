@@ -7,14 +7,15 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+} from './product.js';
+import {
   getProductTags,
   getProductTag,
   createProductTag,
   updateProductTag,
   deleteProductTag,
-  uploadImage,
-} from './product.js';
-
+} from './productTag.js';
+import { uploadImage } from './imageResizer.js';
 const router = express.Router();
 
 router

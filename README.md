@@ -27,6 +27,7 @@ npm run dev
 - Used ES6 with Node.js using Babel
 - Built Product, ProductImage, and ProductTag models
 - Built routes for CRUD operations of the Product Model
+- Built an image resizer to generate thumbnails from product images
 
 ## TODO
 

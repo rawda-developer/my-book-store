@@ -1,4 +1,5 @@
 import ProductImage from '../models/ProductImage';
+import Product from '../models/Product';
 import ImageResizer from '../utils/ImageResizer';
 import path from 'path';
 
@@ -23,7 +24,18 @@ export const uploadImage = async (req, res, next) => {
     if (err) {
       res.status(500).send(err);
     } else {
-      res.json(productImage);
+      Product.findByIdAndUpdate(
+        req.params.id,
+        { $push: { images: productImage._id } },
+        { new: true },
+        (err, product) => {
+          if (err) {
+            res.status(500).send(err);
+          } else {
+            res.status(200).send(product);
+          }
+        }
+      );
     }
   });
 };

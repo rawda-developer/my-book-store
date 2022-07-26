@@ -7,7 +7,6 @@ const ProductImageSchema = new Schema({
   },
   thumbnail: {
     type: String,
-    required: true,
   },
   file_mime_type: {
     type: String,

@@ -1,6 +1,7 @@
 import express from 'express';
 
 import upload from '../middleware/upload';
+
 import {
   getProducts,
   getProduct,
@@ -15,7 +16,7 @@ import {
   updateProductTag,
   deleteProductTag,
 } from './productTag.js';
-import { uploadImage } from './imageResizer.js';
+import { uploadImage } from './image.js';
 import { register, login, logout } from './userAuthManagement.js';
 import auth from './auth';
 const router = express.Router();
@@ -35,5 +36,4 @@ router
   .post('/register', register)
   .post('/login', login)
   .post('/logout', auth.required, logout);
-
 export default router;

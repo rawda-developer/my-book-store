@@ -1,5 +1,5 @@
 import Product from '../models/Product.js';
-import ProductImage from '../models/ProductImage.js';
+
 import ProductTag from '../models/ProductTag.js';
 import ImageResizer from '../utils/ImageResizer.js';
 import path from 'path';
@@ -8,6 +8,7 @@ import path from 'path';
 export const getProducts = (req, res) => {
   Product.find({})
     .populate('tags')
+    .populate('images')
     .exec((err, products) => {
       if (err) {
         res.status(500).send(err);
@@ -19,6 +20,7 @@ export const getProducts = (req, res) => {
 export const getProduct = (req, res) => {
   Product.findById(req.params.id)
     .populate('tags')
+    .populate('images')
     .exec((err, product) => {
       if (err) {
         res.status(500).send(err);
@@ -41,6 +43,7 @@ export const createProduct = (req, res) => {
 export const updateProduct = (req, res) => {
   Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .populate('tags')
+    .populate('images')
     .exec((err, product) => {
       if (err) {
         res.status(500).send(err);

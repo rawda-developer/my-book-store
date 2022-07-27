@@ -16,7 +16,7 @@ import {
   updateProductTag,
   deleteProductTag,
 } from './productTag.js';
-import { uploadImage, getImage } from './image.js';
+import { uploadImage, getImage, getProductImages } from './image.js';
 import { register, login, logout } from './userAuthManagement.js';
 import auth from './auth';
 const router = express.Router();
@@ -29,6 +29,7 @@ router
   .delete('/products/:id', deleteProduct)
   .post('/products/:id/images', upload.single('image'), uploadImage)
   .get('/images/:id', getImage)
+  .get('/products/:id/images', getProductImages)
   .get('/products/:id/tags', getProductTags)
   .get('/products/:id/tags/:id', getProductTag)
   .post('/products/:id/tags', createProductTag)

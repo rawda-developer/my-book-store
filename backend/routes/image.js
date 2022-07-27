@@ -49,3 +49,16 @@ export const getImage = async (req, res, next) => {
   }
   res.sendFile(path.join(__dirname, '../thumbnails', productImage.thumbnail));
 };
+
+export const getProductImages = async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+  if (!product) {
+    const error = new Error('No product found');
+    error.httpStatusCode = 404;
+    return next(error);
+  }
+  const productImages = await ProductImage.find({
+    _id: { $in: product.images },
+  });
+  res.send(productImages);
+};

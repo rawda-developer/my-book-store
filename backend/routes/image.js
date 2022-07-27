@@ -39,3 +39,13 @@ export const uploadImage = async (req, res, next) => {
     }
   });
 };
+
+export const getImage = async (req, res, next) => {
+  const productImage = await ProductImage.findById(req.params.id);
+  if (!productImage) {
+    const error = new Error('No image found');
+    error.httpStatusCode = 404;
+    return next(error);
+  }
+  res.sendFile(path.join(__dirname, '../thumbnails', productImage.thumbnail));
+};

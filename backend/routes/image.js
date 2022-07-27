@@ -62,3 +62,32 @@ export const getProductImages = async (req, res, next) => {
   });
   res.send(productImages);
 };
+
+export const updateProductImage = async (req, res, next) => {
+  const productImage = await ProductImage.findById(req.params.id);
+  if (!productImage) {
+    const error = new Error('No image found');
+    error.httpStatusCode = 404;
+    return next(error);
+  }
+  const origImage = req.file;
+  if (!origImage) {
+    const error = new Error('No file received');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+  const thumbnailsFolder = path.join(__dirname, '../thumbnails');
+  const resizer = new ImageResizer(thumbnailsFolder);
+  console.log('buffer', origImage.path);
+  const thumbnail = await resizer.save(origImage.path);
+  productImage.image = origImage.filename;
+  productImage.thumbnail = thumbnail;
+  productImage.file_mime_type = origImage.mimetype;
+  productImage.save((err, productImage) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(productImage);
+    }
+  });
+};
